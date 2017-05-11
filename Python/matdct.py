@@ -17,6 +17,6 @@ def matdct(n):
 			else:
 				ligne.append(m.sqrt(2/n)*m.cos(((2*j+1)*i*m.pi)/(2*n)))
 		matrice.append(ligne)
-	return matrice
+	return np.asarray(matrice)
 				
-matdct(8)
+print(matdct(8))
