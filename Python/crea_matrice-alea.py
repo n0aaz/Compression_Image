@@ -13,4 +13,3 @@ def creamat(L,C):
     print(len(M))
     M=np.reshape(M,(L,C,3))
     return M
-        
