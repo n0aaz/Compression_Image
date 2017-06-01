@@ -6,6 +6,7 @@ import numpy.random as rd
 import numpy as np
 import imageio as im
 import os as os
+import math as m
 
 ## Fonction de décomposition d'une image couleur en trois images RGB
 
@@ -16,7 +17,7 @@ def RGBdecom(Nom_entree,Nom_sortie):#Name1=nom entrée, Name2=nom de sortie
     R=Name2+"R.png"#Noms complets de fichiers de sortie
     G=Name2+"G.png"
     B=Name2+"B.png"
-    I=im.imread(Name1)
+    I=im.imread(Name1+".png")
     T=I.shape#Taille de l'image
     L=T[0]
     l=T[1]
@@ -107,7 +108,7 @@ def Sec8x8(Nom_image):
     
 ## Fonction de décomposition d'une matrice carrée en matrices de taille désirée
 
-"""ATTENTION CETTE FONCTION PREND COMME SOURCE UNE IMAGE ET RETOURNE DES IMAGES (A MODIFIER DANS LE PROGRAMME FINAL)!!!"""
+"""ATTENTION CETTE FONCTION PREND COMME SOURCE UNE IMAGE ET RETOURNE UNE LISTE DE MATRICES"""
 def SecNxN(Nom_image,Taille):
     P=Taille
     N=Nom_image
@@ -132,8 +133,9 @@ def SecNxN(Nom_image,Taille):
         Lp=np.asarray(Lp)
         Lp=np.reshape(Lp,(Lr,C+Cr))#créé une matrice de nombre de ligne necessaire et de meme nombre de colonne que I+Cp
         I=np.append(I,Lp,axis=0)
-        im.imsave(str(N[0:N.index(".")]+"int.png"),I)#permet de renommer en ayant enlevé ".png" au préalable
+        #im.imsave(str(N[0:N.index(".")]+"int.png"),I)#permet de renommer en ayant enlevé ".png" au préalable
     T=I.shape;Lf=int(T[0]);Cf=int(T[1])#reste a diviser la matrice en matrices 8x8
+    liste=[]
     for k in range(0,Lf//P):
         for j in range(0,Cf//P):#regarder chaque carré de 8x8 pixels
             M=[]
@@ -142,9 +144,14 @@ def SecNxN(Nom_image,Taille):
                 for b in range(0,P):#parcourir chaque pixel des carrés
                     M.append(I[a+k*P][b+j*P])
             M=np.asarray(M)
+            print(P,Lf,Cf)
             M=np.reshape(M,(P,P))
             n=str(N[0:N.index(".")])+str(k)+str(j)+".png"#nom final (ayant été renommé après avoir supprimé ".png"
-            im.imsave(str(n),M)
+            #im.imsave(str(n),M)
+            liste.append(M)
+    liste.append(Lf//P)#important pour connaitre dans le programme final le nombre de lignes et de colonnes
+    liste.append(Cf//P)
+    return liste
             
 ## Fonction de recomposition d'une image a partir de toutes les images de taille 8x8 extraites
 
@@ -224,17 +231,22 @@ def creaim(Lignes,Colonnes,Nom_sortie):
 ## Fonction de multiplication de matrices
 
 def MultMat(A,B):
-	matrice=[]
-	for i in range(len(A)):
-		ligne=[]
-		for j in range(len(B)):
-			som=0
-			for k in range(len(A)):
-				som+=A[i][k]*B[k][j]
-			ligne.append(som)
-		matrice.append(ligne)
+    matrice=[]
+    TA=A.shape;LA=TA[0];CA=TA[1]
+    TB=B.shape;LB=TB[0];CB=TB[1]
+    for i in range(CA):
+        ligne=[]
+        for j in range(CA):
+            som=0
+            for k in range(CA):
+                som+=A[i][k]*B[k][j]
+            matrice.append(som)
+    matrice=np.asarray(matrice)
+    matrice=np.reshape(matrice,(LA,CB))
+    return matrice
 		
 ## Fonction de création de la matrice de la DCT
+import math as m
 
 def c(x):
 	if x==0 :
@@ -243,22 +255,23 @@ def c(x):
 		return 1
 		
 def MatDCT(n):
-	matrice=[]
-	for i in range(n):
-		ligne=[]
-		for j in range(n):
-			if i==0 : 
-				ligne.append(1/m.sqrt(n))
-			else:
-				ligne.append(m.sqrt(2/n)*m.cos(((2*j+1)*i*m.pi)/(2*n)))
-		matrice.append(ligne)
-	return np.asarray(matrice)
+    import math as m
+    matrice=[]
+    for i in range(n):
+        ligne=[]
+        for j in range(n):
+            if i==0 :
+                ligne.append(1/m.sqrt(n))
+            else:
+                ligne.append(m.sqrt(2/n)*m.cos(((2*j+1)*(i+1)*m.pi)/(2*n)))
+        matrice.append(ligne)
+    return np.asarray(matrice)
 				
 #print(MatDCT(8))
 
 ## Fonction d'inversion d'une matrice
 
-"""/!\ ATTENTION PAS DE SECURITE SI MATRICE NON INVERSIBLE !!!"""
+"""/!\ ATTENTION PAS DE SECURITE SI MATRICE NON INVERSIBLE /!\ """
 np.set_printoptions(precision=5)#permet de ne pas avoir de chiffres en écriture décimale trop long
 np.set_printoptions(suppress=True)#autorise la suppression automatique d'éléments du tableau(?)
 def InvMat(Matrice):
@@ -269,7 +282,7 @@ def InvMat(Matrice):
         I[k][k]=1
     #print(I)
     M=np.append(M,I,axis=1)#colle les matrices M et I
-    print('1',M)
+    #print('1',M)
     for k in range(0,L-1):#création d'une matrice triangulaire supérieure
         for j in range(k+1,L):
             if M[k][k]!=0:#vérifier que le coef de la diagonale est différent de 0, sinon division par 0!
@@ -292,3 +305,36 @@ def InvMat(Matrice):
     for k in range(L-1,-1,-1):#/!\ si range(0,L) une ligne sur deux sera supprimée
         M=np.delete(M,(k),axis=1)#permet de supprimer la k-ème colonne de M, et donc de retourner l'inverse de M
     return M
+## Fonction qui recompose une matrice a partir de matrices de taille NxN
+
+"""ATTENTION CETTE FONCTION A POUR ENTREE UNE LISTE DE MATRICE ET POUR SORTIE UNE MATRICE"""
+def recomNxN(m):#fournir le nom de l'image avant découpage, avec ".png"
+    j=m[len(m)-2]#il peut y avoir un probleme du a l'inversion des deux variables
+    k=m[len(m)-1]
+    I=[]
+    print(j,k,m)
+    for a in range(0,j):
+        for b in range(0,k):
+            if b>=1:#important d'initialiser b sinon I est de taille (0,0)
+                M=m[a*j+b]
+                I=np.append(I,M,axis=1)#I forme un ligne de 8 pixels de haut
+            else:
+                I=m[a*j]
+        if a>=1:
+            A=np.append(A,I,axis=0)#regroupe les lignes de matrices /!\ pour a=0 la matrice A n'existe pas encore
+        else:
+            A=I#si a=0, il faut initialiser A 
+    return A
+    
+## Fonction qui donne la matrice de quantification
+
+def matQuant(n):
+    q1=[800,600,500,800,1200,2000,2550,2550,550,600,700,950,1300,2550,2550,2550,700,650,800,1200,2000,2550,2550,2550,700,850,1100,1450,2550,2550,2550,2550,900,1100,1850,2550,2550,2550,2550,2550,1200,1750,2550,2550,2550,2550,2550,2550,2450,2550,2550,2550,2550,2550,2550,2550,2550,2550,2550,2550,2550,2550,2550,2550]
+    q=[]
+    print(len(q1),q1[0])
+    for k in range(64):
+        q.append(q1[k]/n)
+    q=np.asarray(q)
+    print(q.shape)
+    q=np.reshape(q,(8,8))
+    return q
