@@ -137,7 +137,7 @@ def SecNxN(Nom_image,Taille):
     T=I.shape;Lf=int(T[0]);Cf=int(T[1])#reste a diviser la matrice en matrices 8x8
     liste=[]
     for k in range(0,Lf//P):
-        for j in range(0,Cf//P):#regarder chaque carré de 8x8 pixels
+        for j in range(0,Cf//P):#regarder chaque carré de NxN pixels
             M=[]
             print(k,j)
             for a in range(0,P):
@@ -338,3 +338,13 @@ def matQuant(n):
     print(q.shape)
     q=np.reshape(q,(8,8))
     return q
+    
+## Fonction -127
+def mcentvs(m):
+    a=m-127
+    return a
+
+##Fonction +127
+def pcentvs(m):
+    a=m+127
+    return a
