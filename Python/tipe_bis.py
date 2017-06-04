@@ -85,8 +85,8 @@ def lecture(chemin):
 	sortie=sortie.split("\n\n")
 	for a in range(len(sortie)):
 		sortie[a]=sortie[a].split("\n")
-	for a in range(len(sortie)):
-		sortie[a]=sortie[a].split(",")
+	'''for a in range(len(sortie)):
+		sortie[a]=sortie[a].split(",")'''
 		
 	return sortie
 
