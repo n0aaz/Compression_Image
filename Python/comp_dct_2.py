@@ -15,7 +15,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
     
     ###########/!\CECI N'INVERSE PAS LA MATRICE MAIS EN FAIT UNE TRANSPOSEE /!\ #################
     invdct=np.linalg.inv(dctmat)#matrice de changement de base inverse
-    print(invdct) 
+    print(np.dot(dctmat,invdct)) 
     ###########/!\CECI N'INVERSE PAS LA MATRICE MAIS EN FAIT UNE TRANSPOSEE /!\ #################
     
     matquant=quantMat(q)#donne une matrice de quantification au niveau choisi
