@@ -87,5 +87,5 @@ def plus127(i):
     return i+127
 ##sauvegarde image
 def saveIm(i,n):
-    n=n[0:n.index(".")]+"comp.png"
+    n=n[0:n.index(".")]+"comp.bmp"
     im.imsave(n,i)

@@ -26,7 +26,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
             matsec=moins127(np.int_(lmat[j]))
             matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
             matsec=matsec/matquant
-            print(matsec)
+            #print(matquant)
             
             if z!=0:
                 for l in range(d):
@@ -42,4 +42,4 @@ def compDCT2(nom,decoupage,quantification,seuil):
     matc=recoRGB(lf)
     saveIm(matc,n)
 
-compDCT2('couleur.bmp',8,0,0)
+compDCT2('paysage.bmp',8,2500,0)
