@@ -55,7 +55,18 @@ def dediago(l):
 					a[m-1-(i-k)][m-1-k]=l[len(l)-1-j]
 			j+=1
 	return a
-
+##Compression RLE (Run Lenght Encoding) pour gagner de l'espace sur les schémas répétitifs
+def rle(l):
+	k=1
+	sortie=[]
+	for a in range(1,len(l)):
+		if l[a]==l[a-1]:
+			k+=1
+		else:
+			sortie.append(str(k)+','+str(l[a-1]))
+			k=1
+	return sortie
+	
 ##lecture image
 def lectImage(n):
     return np.asarray(im.imread(n))
