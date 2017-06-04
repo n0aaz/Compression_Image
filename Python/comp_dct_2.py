@@ -14,7 +14,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
     dctmat=matDCT(d)#matrice du changement de base
     
     enreg=open('compress.txt','w')
-    precision=2 #nombre de chiffres significatifs
+    precision=0 #nombre de chiffres significatifs
     
     invdct=np.linalg.inv(dctmat)#matrice de changement de base inverse
     
@@ -33,15 +33,15 @@ def compDCT2(nom,decoupage,quantification,seuil):
             matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
             
             
-            if z!=0: #compression avec perte
+            '''if z!=0: #compression avec perte
                 for l in range(d):
                     for o in range(d):
                         if abs(matsec)[l][o]<=z:#compression
                             matsec[l][o]=0
-            
-            matsec=matsec/matquant
+            '''
+            matsec=np.round(matsec/matquant)
             for k in rle(diago(matsec)):
-                enreg.write(str(k[0])+','+str(round(k[1],precision))+'\n')
+                enreg.write(str(k[0])+','+str(int(k[1]))+'\n')
             enreg.write('\n')
 
             #print(dediago(unrle(rle(diago(matsec)),d**2))-matsec) #petite vérfication pour voir si la compression/décompression fonctionne
@@ -58,4 +58,4 @@ def compDCT2(nom,decoupage,quantification,seuil):
     matc=recoRGB(lf)
     saveIm(matc,n)
 
-compDCT2('paysage.bmp',8,1,90)
+compDCT2('paysage.bmp',8,1,50)
