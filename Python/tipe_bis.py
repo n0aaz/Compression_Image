@@ -4,7 +4,7 @@ import numpy as np
 import math
 np.set_printoptions(precision=5)#permet de ne pas avoir de chiffres en écriture décimale trop long
 np.set_printoptions(suppress=True)#autorise la suppression automatique d'éléments du tableau(?)
-##matrice DCT
+#matrice DCT
 def matDCT(n):
     import math as m
     matrice=[]
@@ -17,7 +17,7 @@ def matDCT(n):
                 ligne.append(m.sqrt(2/n)*m.cos(((2*j+1)*i*m.pi)/(2*n)))
         matrice.append(ligne)
     return np.asarray(matrice)
-##linéarisation en serpent de la matrice
+#linéarisation en serpent de la matrice
 def diago(l):
 	m,n=np.shape(l)[0],np.shape(l)[1]
 	if m != n :
@@ -36,7 +36,7 @@ def diago(l):
 					b.append(l[m-1-(i-k)][m-1-k])	
 	b.reverse()					#On a besoin de deux listes: une qui parcourt la matrice par la fin , une par le début et on assemble
 	return (a+b)
-##retransformation de la liste serpent en matrice
+#retransformation de la liste serpent en matrice
 def dediago(l):
 	m=int(math.sqrt(len(l)))
 	a=np.zeros((m,m))
@@ -56,7 +56,7 @@ def dediago(l):
 					a[m-1-(i-k)][m-1-k]=l[len(l)-1-j]
 			j+=1
 	return a
-##Compression RLE (Run Lenght Encoding) pour gagner de l'espace sur les schémas répétitifs
+#Compression RLE (Run Lenght Encoding) pour gagner de l'espace sur les schémas répétitifs
 def rle(l):
 	k=1
 	sortie=[]
@@ -75,7 +75,19 @@ def unrle(l,n):
 	while len(sortie)<n:
 		sortie.append(0)
 	return sortie
+#Lecture depuis un fichier texte
+def lecture(chemin):
+	fichier=open(chemin,'r')
+	sortie=''
 	
+	for a in fichier:
+		sortie+=a
+	sortie=sortie.split('/n/n')
+	for a in range(len(sortie)):
+		sortie[a]=sortie[a].split('/n')
+	return sortie
+
+
 ##lecture image
 def lectImage(n):
     return np.asarray(im.imread(n))

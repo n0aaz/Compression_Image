@@ -44,6 +44,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
                 enreg.write(str(k[0])+','+str(int(k[1]))+'\n')
             enreg.write('\n')
 
+            #print(lecture('compress.txt'))
             #print(dediago(unrle(rle(diago(matsec)),d**2))-matsec) #petite vérfication pour voir si la compression/décompression fonctionne
                                                                   #Si c'est le cas ça devrait nous renvoyer uniquement des matrices nulles
             matsec=matsec*matquant
@@ -57,5 +58,6 @@ def compDCT2(nom,decoupage,quantification,seuil):
         lf.append(mat)
     matc=recoRGB(lf)
     saveIm(matc,n)
+    print(lecture('compress.txt'))
 
 compDCT2('paysage.bmp',8,1,50)
