@@ -24,8 +24,9 @@ def compDCT2(nom,decoupage,quantification,seuil):
         lmat=decoupNxN(mat,d)#decoupe la matrice pour donner une liste de matrices
         for j in range(len(lmat)):
             matsec=moins127(np.int_(lmat[j]))
-            matsec=np.floor(dctmat.dot(matsec.dot(invdct)))#on obtient matsec dans la base DCT
-            matsec=np.floor(matsec/matquant)
+            matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
+            matsec=matsec/matquant
+            print(matsec)
             
             if z!=0:
                 for l in range(d):
@@ -41,4 +42,4 @@ def compDCT2(nom,decoupage,quantification,seuil):
     matc=recoRGB(lf)
     saveIm(matc,n)
 
-compDCT2('couleur.bmp',8,1,0)
+compDCT2('couleur.bmp',8,0,0)
