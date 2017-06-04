@@ -1,6 +1,7 @@
 """Module du programme 'comp_dct_2.py' """
 import imageio as im
 import numpy as np
+import math
 np.set_printoptions(precision=5)#permet de ne pas avoir de chiffres en écriture décimale trop long
 np.set_printoptions(suppress=True)#autorise la suppression automatique d'éléments du tableau(?)
 ##matrice DCT
@@ -63,8 +64,16 @@ def rle(l):
 		if l[a]==l[a-1]:
 			k+=1
 		else:
-			sortie.append(str(k)+','+str(l[a-1]))
+			sortie.append([k,l[a-1]])
 			k=1
+	return sortie
+#Décompression RLE
+def unrle(l,n):
+	sortie=[]
+	for objet in l:
+		sortie+=[objet[1] for compteur in range(objet[0])]
+	while len(sortie)<n:
+		sortie.append(0)
 	return sortie
 	
 ##lecture image
