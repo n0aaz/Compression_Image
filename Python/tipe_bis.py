@@ -20,7 +20,7 @@ def matDCT(n):
 def diago(l):
 	m,n=np.shape(l)[0],np.shape(l)[1]
 	if m != n :
-		return False
+		return False			#On vérifie que la matrice est bien carrée, ça evitera des bizarreries par la suite
 		
 	a,b=[],[]
 	for i in range(m):
@@ -33,7 +33,7 @@ def diago(l):
 				a.append(l[i-k][k])
 				if i!=m-1:
 					b.append(l[m-1-(i-k)][m-1-k])	
-	b.reverse()			
+	b.reverse()					#On a besoin de deux listes: une qui parcourt la matrice par la fin , une par le début et on assemble
 	return (a+b)
 ##retransformation de la liste serpent en matrice
 def dediago(l):
@@ -42,6 +42,7 @@ def dediago(l):
 	
 	j=0
 	
+	#même idée que précédemment , on ajoute chaque élément de la liste en partant du début et de la fin vers le milieu puis on colle
 	for i in range(m):
 		for k in range (i+1):
 			if i%2==0:
