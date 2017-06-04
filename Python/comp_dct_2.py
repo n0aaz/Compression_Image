@@ -12,6 +12,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
     n=nom;d=decoupage;q=quantification;z=seuil;lf=[]
     #imp=input("impression des photos intermédiares:\n1=oui\n0=non\n")
     dctmat=matDCT(d)#matrice du changement de base
+    print(dctmat)
     invdct=np.linalg.inv(dctmat)#matrice de changement de base inverse
     matquant=quantMat(q)#donne une matrice de quantification au niveau choisi
     i=lectImage(n)#i donne la matrice de l'image n
@@ -21,9 +22,9 @@ def compDCT2(nom,decoupage,quantification,seuil):
         mat=retail(mat,d)#donne une matrice de taille multiple du découpageS
         lmat=decoupNxN(mat,d)#decoupe la matrice pour donner une liste de matrices
         for j in range(len(lmat)):
-            matsec=lmat[j]
-            print(matsec.dot(invdct))
+            matsec=lmat[j]-127
             matsec=np.floor(dctmat.dot(matsec.dot(invdct)))#on obtient matsec dans la base DCT
+            #print(matsec)
             matsec=np.floor(matsec/matquant)
             
             if z!=0:
@@ -40,4 +41,4 @@ def compDCT2(nom,decoupage,quantification,seuil):
     matc=recoRGB(lf)
     saveIm(matc,n)
 
-compDCT2('couleur.bmp',8,1,127)
+compDCT2('couleur.bmp',8,1,0)

@@ -13,7 +13,7 @@ def matDCT(n):
             if i==0 :
                 ligne.append(1/m.sqrt(n))
             else:
-                ligne.append(m.sqrt(2/n)*m.cos(((2*j+1)*(i+1)*m.pi)/(2*n)))
+                ligne.append(m.sqrt(2/n)*m.cos(((2*j+1)*i*m.pi)/(2*n)))
         matrice.append(ligne)
     return np.asarray(matrice)
 ##lecture image
@@ -54,7 +54,6 @@ def quantMat(quant):
     q=[800,600,500,800,1200,2000,2550,2550],[550,600,700,950,1300,2550,2550,2550],[700,650,800,1200,2000,2550,2550,2550],[700,850,1100,1450,2550,2550,2550,2550],[900,1100,1850,2550,2550,2550,2550,2550],[1200,1750,2550,2550,2550,2550,2550,2550],[2450,2550,2550,2550,2550,2550,2550,2550],[2550,2550,2550,2550,2550,2550,2550,2550]
     q=0.1*np.asarray(q)
     q=np.reshape(q,(8,8))
-    print(q)
     if quant!=0:
         q=np.ceil(q/quant)
     return q
