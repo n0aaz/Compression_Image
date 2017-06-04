@@ -42,4 +42,4 @@ def compDCT2(nom,decoupage,quantification,seuil):
     matc=recoRGB(lf)
     saveIm(matc,n)
 
-compDCT2('paysage.bmp',8,2500,0)
+compDCT2('paysage.bmp',8,2500,2)

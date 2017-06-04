@@ -16,6 +16,26 @@ def matDCT(n):
                 ligne.append(m.sqrt(2/n)*m.cos(((2*j+1)*i*m.pi)/(2*n)))
         matrice.append(ligne)
     return np.asarray(matrice)
+##linéarisation en serpent de la matrice
+def diago(l):
+	m,n=np.shape(l)[0],np.shape(l)[1]
+	if m != n :
+		return False
+		
+	a,b=[],[]
+	for i in range(m):
+		for k in range (i+1):
+			if i%2==0:
+				a.append(l[k][i-k])
+				if i!=m-1:
+					b.append(l[m-1-k][m-1-(i-k)])
+			else:
+				a.append(l[i-k][k])
+				if i!=m-1:
+					b.append(l[m-1-(i-k)][m-1-k])	
+	b.reverse()			
+	return (a+b)
+
 ##lecture image
 def lectImage(n):
     return np.asarray(im.imread(n))
