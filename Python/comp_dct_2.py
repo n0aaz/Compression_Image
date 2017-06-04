@@ -31,8 +31,6 @@ def compDCT2(nom,decoupage,quantification,seuil):
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
             matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
-            #print(matsec)
-            matsec=matsec/matquant
             
             
             if z!=0: #compression avec perte
@@ -40,14 +38,18 @@ def compDCT2(nom,decoupage,quantification,seuil):
                     for o in range(d):
                         if abs(matsec)[l][o]<=z:#compression
                             matsec[l][o]=0
+            
+            matsec=matsec/matquant
+            for k in rle(diago(matsec)):
+                enreg.write(str(k[0])+','+str(round(k[1],precision))+'\n')
+            enreg.write('\n')
 
             #print(dediago(unrle(rle(diago(matsec)),d**2))-matsec) #petite vérfication pour voir si la compression/décompression fonctionne
                                                                   #Si c'est le cas ça devrait nous renvoyer uniquement des matrices nulles
             matsec=matsec*matquant
-            for k in rle(diago(matsec)):
-                enreg.write(str(k[0])+','+str(round(k[1],precision))+'\n')
-            enreg.write('\n')
+
             matsec=invdct.dot(matsec.dot(dctmat))
+            #print(matsec)
             
             lmat[j]=matsec
         mat=recoNxN(lmat,ligne,colonne,d)
@@ -56,4 +58,4 @@ def compDCT2(nom,decoupage,quantification,seuil):
     matc=recoRGB(lf)
     saveIm(matc,n)
 
-compDCT2('paysage.bmp',8,1,1.5)
+compDCT2('paysage.bmp',8,1,90)
