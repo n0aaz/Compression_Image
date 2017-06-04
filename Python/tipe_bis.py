@@ -82,11 +82,15 @@ def lecture(chemin):
 	
 	for a in fichier:
 		sortie+=a
-	sortie=sortie.split('/n/n')
+	sortie=sortie.split("\n\n")
 	for a in range(len(sortie)):
-		sortie[a]=sortie[a].split('/n')
+		sortie[a]=sortie[a].split("\n")
+	for a in range(len(sortie)):
+		sortie[a]=sortie[a].split(",")
+		
 	return sortie
 
+print(lecture('compress.txt'))
 
 ##lecture image
 def lectImage(n):

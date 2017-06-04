@@ -58,6 +58,6 @@ def compDCT2(nom,decoupage,quantification,seuil):
         lf.append(mat)
     matc=recoRGB(lf)
     saveIm(matc,n)
-    print(lecture('compress.txt'))
+    print(len(lecture('compress.txt')[0]))
 
 compDCT2('paysage.bmp',8,1,50)
