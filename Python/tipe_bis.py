@@ -52,10 +52,11 @@ def decoupNxN(i,n):
 ##matrice de quantification
 def quantMat(quant):
     q=[800,600,500,800,1200,2000,2550,2550],[550,600,700,950,1300,2550,2550,2550],[700,650,800,1200,2000,2550,2550,2550],[700,850,1100,1450,2550,2550,2550,2550],[900,1100,1850,2550,2550,2550,2550,2550],[1200,1750,2550,2550,2550,2550,2550,2550],[2450,2550,2550,2550,2550,2550,2550,2550],[2550,2550,2550,2550,2550,2550,2550,2550]
-    q=np.asarray(q)
+    q=0.1*np.asarray(q)
     q=np.reshape(q,(8,8))
+    print(q)
     if quant!=0:
-        q=q/quant
+        q=np.ceil(q/quant)
     return q
 ##recomposition de la matrice image
 def recoNxN(i,ligne,colonne,d):

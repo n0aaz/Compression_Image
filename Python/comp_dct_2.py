@@ -2,9 +2,12 @@ import imageio as im
 import numpy as np
 import os as os
 import math as math
-os.chdir("C:\\Users\\valen\\Documents\\GitHub\\Compression_Image\\Python")#attention, definir le chemin d'accès de votre ordi!
 from tipe_bis import *
-os.chdir("C:\\valentin\\MPSI\\TIPE\\images\\DCT")#attention, definir le chemin d'accès de votre ordi!
+
+os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
+os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
+
+
 def compDCT2(nom,decoupage,quantification,seuil):
     n=nom;d=decoupage;q=quantification;z=seuil;lf=[]
     #imp=input("impression des photos intermédiares:\n1=oui\n0=non\n")
@@ -19,8 +22,10 @@ def compDCT2(nom,decoupage,quantification,seuil):
         lmat=decoupNxN(mat,d)#decoupe la matrice pour donner une liste de matrices
         for j in range(len(lmat)):
             matsec=lmat[j]
-            matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
-            matsec=matsec/matquant
+            print(matsec.dot(invdct))
+            matsec=np.floor(dctmat.dot(matsec.dot(invdct)))#on obtient matsec dans la base DCT
+            matsec=np.floor(matsec/matquant)
+            
             if z!=0:
                 for l in range(d):
                     for o in range(d):
@@ -34,3 +39,5 @@ def compDCT2(nom,decoupage,quantification,seuil):
         lf.append(mat)
     matc=recoRGB(lf)
     saveIm(matc,n)
+
+compDCT2('couleur.bmp',8,1,127)
