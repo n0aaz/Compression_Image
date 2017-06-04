@@ -35,6 +35,25 @@ def diago(l):
 					b.append(l[m-1-(i-k)][m-1-k])	
 	b.reverse()			
 	return (a+b)
+##retransformation de la liste serpent en matrice
+def dediago(l):
+	m=int(math.sqrt(len(l)))
+	a=np.zeros((m,m))
+	
+	j=0
+	
+	for i in range(m):
+		for k in range (i+1):
+			if i%2==0:
+				a[k][i-k]=l[j]
+				if i!=m-1:
+					a[m-1-k][m-1-(i-k)]=l[len(l)-1-j]
+			else:
+				a[i-k][k]=l[j]
+				if i!=m-1:
+					a[m-1-(i-k)][m-1-k]=l[len(l)-1-j]
+			j+=1
+	return a
 
 ##lecture image
 def lectImage(n):
