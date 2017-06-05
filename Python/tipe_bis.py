@@ -98,15 +98,15 @@ def lecture(chemin):
 				else:
 					sortie[a][b]=[1,0]
 				#print(n)
-	return (sortie)
+	return (sortie)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
 
 '''m=lecture('compress.txt')
 #print(m[1])
 unrl=[]
 #print(dediago(unrle(m[1],64)))
-for k in m:
+for k in m: #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
 	#print(k)
-	unrl.append(dediago(unrle(k,64)))
+	unrl.append(dediago(unrle(k,64))) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
 print(len(unrl))'''
 
 ##lecture image
