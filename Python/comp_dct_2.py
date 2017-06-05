@@ -13,7 +13,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
     #imp=input("impression des photos intermédiares:\n1=oui\n0=non\n")
     dctmat=matDCT(d)#matrice du changement de base
     
-    enreg=open('compress.txt','w')
+    #enreg=open('compress.txt','w')
     precision=0 #nombre de chiffres significatifs
     
     invdct=np.linalg.inv(dctmat)#matrice de changement de base inverse
@@ -27,6 +27,8 @@ def compDCT2(nom,decoupage,quantification,seuil):
         mat=a[k]#matrice de la couleur traitée
         mat=retail(mat,d)#donne une matrice de taille multiple du découpageS
         lmat=decoupNxN(mat,d)#decoupe la matrice pour donner une liste de matrices
+        
+        enreg=open(str(k)+'.txt','w')
         
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
@@ -44,7 +46,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
                 enreg.write(str(k[0])+','+str(int(k[1]))+'\n')
             enreg.write('\n')
 
-            print(rle(diago(matsec)))
+            #print(rle(diago(matsec)))
             #print(lecture('compress.txt'))
             #print(dediago(unrle(rle(diago(matsec)),d**2))-matsec) #petite vérfication pour voir si la compression/décompression fonctionne
                                                                   #Si c'est le cas ça devrait nous renvoyer uniquement des matrices nulles
@@ -59,6 +61,6 @@ def compDCT2(nom,decoupage,quantification,seuil):
         lf.append(mat)
     matc=recoRGB(lf)
     saveIm(matc,n)
-    print(len(lecture('compress.txt')[0]))
+    #print(len(lecture('compress.txt')[0]))
 
 compDCT2('paysage.bmp',8,1,50)
