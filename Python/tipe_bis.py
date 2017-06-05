@@ -98,16 +98,15 @@ def lecture(chemin):
 					sortie[a][b]=[1,0]
 					
 	return (sortie)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
-
-'''m=lecture('compress.txt')
-#print(m[1])
-unrl=[]
-#print(dediago(unrle(m[1],64)))
-for k in m: #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
-	#print(k)
-	unrl.append(dediago(unrle(k,64))) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
-print(len(unrl))'''
-
+#Retransformation du fichier texte en liste de matrices
+def transfomatrice(chemin,taillebloc):
+	m=lecture(chemin)
+	unrl=[]
+	for k in m: #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
+		unrl.append(dediago(unrle(k,taillebloc**2))) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
+	return unrl
+	
+	
 ##lecture image
 def lectImage(n):
     return np.asarray(im.imread(n))
