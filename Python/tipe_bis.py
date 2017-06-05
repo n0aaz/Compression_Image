@@ -61,20 +61,22 @@ def rle(l):
 	k=1
 	sortie=[]
 	for a in range(1,len(l)):
-		if l[a]==l[a-1]:
+		if l[a]==l[a-1]: #Tant que le nombre de la liste est identique au précédent , on incrémente un compteur
 			k+=1
 		else:
-			sortie.append([k,l[a-1]])
+			sortie.append([k,l[a-1]]) #puis on ajoute dans une liste selon [répétitions,nombre]
 			k=1
 	return sortie
 #Décompression RLE
 def unrle(l,n):
 	sortie=[]
+	
 	for objet in l:
-		#print(objet)
-		sortie+=[objet[1] for compteur in range(objet[0])]
+		sortie+=[objet[1] for compteur in range(objet[0])] #chaque objet est fait selon le schéma [répétitions,nombre]
+		
 	while len(sortie)<n:
-		sortie.append(0)
+		sortie.append(0)									#on ajoute tous les zéros de fin qui ne sont pas indiqués par compression
+		
 	return sortie
 #Lecture depuis un fichier texte
 def lecture(chemin):
@@ -85,9 +87,6 @@ def lecture(chemin):
 		sortie+=a
 	
 	sortie=sortie.split("\n\n")
-	#sortie.pop()
-	
-	k=[]
 	for a in range(len(sortie)):
 		sortie[a]=sortie[a].split("\n")
 		for b in range(len(sortie[a])):
@@ -97,7 +96,7 @@ def lecture(chemin):
 					sortie[a][b][n]=int(sortie[a][b][n])
 				else:
 					sortie[a][b]=[1,0]
-				#print(n)
+					
 	return (sortie)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
 
 '''m=lecture('compress.txt')
