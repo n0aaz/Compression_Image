@@ -71,6 +71,7 @@ def rle(l):
 def unrle(l,n):
 	sortie=[]
 	for objet in l:
+		#print(objet)
 		sortie+=[objet[1] for compteur in range(objet[0])]
 	while len(sortie)<n:
 		sortie.append(0)
@@ -82,15 +83,31 @@ def lecture(chemin):
 	
 	for a in fichier:
 		sortie+=a
+	
 	sortie=sortie.split("\n\n")
+	#sortie.pop()
+	
+	k=[]
 	for a in range(len(sortie)):
 		sortie[a]=sortie[a].split("\n")
-	'''for a in range(len(sortie)):
-		sortie[a]=sortie[a].split(",")'''
-		
-	return sortie
+		for b in range(len(sortie[a])):
+			sortie[a][b]=sortie[a][b].split(",")
+			for n in range(len(sortie[a][b])):
+				if sortie[a][b][n] != '':
+					sortie[a][b][n]=int(sortie[a][b][n])
+				else:
+					sortie[a][b]=[1,0]
+				#print(n)
+	return (sortie)
 
-print(lecture('compress.txt'))
+'''m=lecture('compress.txt')
+#print(m[1])
+unrl=[]
+#print(dediago(unrle(m[1],64)))
+for k in m:
+	#print(k)
+	unrl.append(dediago(unrle(k,64)))
+print(len(unrl))'''
 
 ##lecture image
 def lectImage(n):
