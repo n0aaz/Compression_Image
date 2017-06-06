@@ -94,10 +94,8 @@ def lecture(chemin):
 	return (final)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
 #Retransformation du fichier texte en liste de matrices
 def transfomatrice(chemin,taillebloc,matquant,dctmat,invdct):
-	print(len(lecture(chemin)))
 	unrl=[]
 	for k in lecture(chemin): #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
-		print(k)
 		aux=dediago(unrle(k,taillebloc**2))*matquant
 		aux=plus127(invdct.dot(aux.dot(dctmat)))
 		unrl.append(aux) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
@@ -145,7 +143,8 @@ def quantMat(quant):
     q=0.1*np.asarray(q)
     q=np.reshape(q,(8,8))
     if quant!=0:
-        q=np.ceil(q/quant)
+        q=np.ceil(q*(quant/100))
+    print(q)
     return q
 ##recomposition de la matrice image
 def recoNxN(i,ligne,colonne,d):

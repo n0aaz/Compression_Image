@@ -8,8 +8,8 @@ os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir 
 os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
 
 
-def compDCT2(nom,decoupage,quantification,seuil):
-    n=nom;d=decoupage;q=quantification;z=seuil;lf=[]
+def compDCT2(nom,decoupage,quantification):
+    n=nom;d=decoupage;q=quantification;lf=[]
     #imp=input("impression des photos intermédiares:\n1=oui\n0=non\n")
     dctmat=matDCT(d)#matrice du changement de base
     
@@ -33,14 +33,6 @@ def compDCT2(nom,decoupage,quantification,seuil):
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
             matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
-            
-            
-            '''if z!=0: #compression avec perte
-                for l in range(d):
-                    for o in range(d):
-                        if abs(matsec)[l][o]<=z:#compression
-                            matsec[l][o]=0
-            '''
             matsec=np.round(matsec/matquant)
             
             dernier=rle(diago(matsec))[-1]
@@ -68,12 +60,13 @@ def compDCT2(nom,decoupage,quantification,seuil):
             #print(lmat[j])
             
         #print(len(lmat))
-        transfomatrice(chemin,d,matquant,dctmat,invdct)
-        mat=recoNxN(lmat,ligne,colonne,d)
+        enreg.close()
+        #transfomatrice(chemin,d,matquant,dctmat,invdct)
+        mat=recoNxN(transfomatrice(chemin,d,matquant,dctmat,invdct),ligne,colonne,d)
         mat=redim(mat,ligne,colonne)
         lf.append(mat)
     matc=recoRGB(lf)
     saveIm(matc,n)
     #print(len(lecture('compress.txt')[0]))
 
-compDCT2('paysage.bmp',8,1,50)
+compDCT2('paysage.bmp',8,100)
