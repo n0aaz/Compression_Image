@@ -61,7 +61,7 @@ def rle(l):
 	k=1
 	sortie=[]
 	for a in range(1,len(l)):
-		if l[a]==l[a-1]: #Tant que le nombre de la liste est identique au précédent , on incrémente un compteur
+		if l[a]==l[a-1] and a != len(l)-1 : #Tant que le nombre de la liste est identique au précédent , on incrémente un compteur
 			k+=1
 		else:
 			sortie.append([k,l[a-1]]) #puis on ajoute dans une liste selon [répétitions,nombre]
@@ -81,30 +81,26 @@ def unrle(l,n):
 #Lecture depuis un fichier texte
 def lecture(chemin):
 	fichier=open(chemin,'r')
-	sortie=''
+	lignes=[ligne.replace('\n','') for ligne in fichier]
+	blocs=[ligne.split('/') for ligne in lignes]
+	suites=[minibloc.split(',') for bloc in blocs for minibloc in bloc]
 	
-	for a in fichier:
-		sortie+=a
-	
-	sortie=sortie.split("\n\n")
-	for a in range(len(sortie)):
-		sortie[a]=sortie[a].split("\n")
-		for b in range(len(sortie[a])):
-			sortie[a][b]=sortie[a][b].split(",")
-			for n in range(len(sortie[a][b])):
-				if sortie[a][b][n] != '':
-					sortie[a][b][n]=int(sortie[a][b][n])
-				else:
-					sortie[a][b]=[1,0]
-					
-	return (sortie)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
+	print(suites)
+
+
+	return (lignes)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
 #Retransformation du fichier texte en liste de matrices
-def transfomatrice(chemin,taillebloc):
-	m=lecture(chemin)
+def transfomatrice(chemin,taillebloc,matquant,dctmat,invdct):
+	print(len(lecture(chemin)))
 	unrl=[]
-	for k in m: #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
-		unrl.append(dediago(unrle(k,taillebloc**2))) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
+	for k in lecture(chemin): #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
+		#print(len(dediago(unrle(k,taillebloc**2))))
+		aux=dediago(unrle(k,taillebloc**2))*matquant
+		aux=plus127(invdct.dot(aux.dot(dctmat)))
+		unrl.append(aux) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
 	return unrl
+
+print(len(lecture('1.txt')))
 	
 	
 ##lecture image

@@ -27,8 +27,8 @@ def compDCT2(nom,decoupage,quantification,seuil):
         mat=a[k]#matrice de la couleur traitée
         mat=retail(mat,d)#donne une matrice de taille multiple du découpageS
         lmat=decoupNxN(mat,d)#decoupe la matrice pour donner une liste de matrices
-        
-        enreg=open(str(k)+'.txt','w')
+        chemin=str(k)+'.txt'
+        enreg=open(chemin,'w')
         
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
@@ -42,8 +42,13 @@ def compDCT2(nom,decoupage,quantification,seuil):
                             matsec[l][o]=0
             '''
             matsec=np.round(matsec/matquant)
+            
+            dernier=rle(diago(matsec))[-1]
             for k in rle(diago(matsec)):
-                enreg.write(str(k[0])+','+str(int(k[1]))+'\n')
+                if k != dernier:
+                    enreg.write(str(k[0])+','+str(int(k[1]))+'/')
+                else:
+                    enreg.write(str(k[0])+','+str(int(k[1])))
             enreg.write('\n')
 
             #print(rle(diago(matsec)))
@@ -51,11 +56,19 @@ def compDCT2(nom,decoupage,quantification,seuil):
             #print(dediago(unrle(rle(diago(matsec)),d**2))-matsec) #petite vérfication pour voir si la compression/décompression fonctionne
                                                                   #Si c'est le cas ça devrait nous renvoyer uniquement des matrices nulles
             matsec=matsec*matquant
+            #print(transfomatrice(chemin,d)[1])
+            #print(len(np.round(transfomatrice(chemin,d)*matquant)))
+            #print(len(matsec))
 
-            matsec=invdct.dot(matsec.dot(dctmat))
+            matsec=plus127(invdct.dot(matsec.dot(dctmat)))
             #print(matsec)
             
             lmat[j]=matsec
+            #transfomatrice(chemin,d)
+            #print(lmat[j])
+            
+        #print(len(lmat))
+        #transfomatrice(chemin,d,matquant,dctmat,invdct)
         mat=recoNxN(lmat,ligne,colonne,d)
         mat=redim(mat,ligne,colonne)
         lf.append(mat)
