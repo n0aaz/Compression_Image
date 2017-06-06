@@ -83,24 +83,27 @@ def lecture(chemin):
 	fichier=open(chemin,'r')
 	lignes=[ligne.replace('\n','') for ligne in fichier]
 	blocs=[ligne.split('/') for ligne in lignes]
-	suites=[minibloc.split(',') for bloc in blocs for minibloc in bloc]
+	final=[]
 	
-	print(suites)
-
-
-	return (lignes)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
+	for a in blocs:
+		suites=[]
+		for bloc in a:
+			suites.append([int(bloc.split(',')[0]),int(bloc.split(',')[1])])
+		final.append(suites)
+	
+	return (final)  #/!\ renvoie une LISTE DE BLOCS 8*8 compressés
 #Retransformation du fichier texte en liste de matrices
 def transfomatrice(chemin,taillebloc,matquant,dctmat,invdct):
 	print(len(lecture(chemin)))
 	unrl=[]
 	for k in lecture(chemin): #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
-		#print(len(dediago(unrle(k,taillebloc**2))))
+		print(k)
 		aux=dediago(unrle(k,taillebloc**2))*matquant
 		aux=plus127(invdct.dot(aux.dot(dctmat)))
 		unrl.append(aux) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
 	return unrl
 
-print(len(lecture('1.txt')))
+#print(len(lecture('3.txt')))
 	
 	
 ##lecture image

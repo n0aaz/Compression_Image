@@ -68,7 +68,7 @@ def compDCT2(nom,decoupage,quantification,seuil):
             #print(lmat[j])
             
         #print(len(lmat))
-        #transfomatrice(chemin,d,matquant,dctmat,invdct)
+        transfomatrice(chemin,d,matquant,dctmat,invdct)
         mat=recoNxN(lmat,ligne,colonne,d)
         mat=redim(mat,ligne,colonne)
         lf.append(mat)
