@@ -33,7 +33,8 @@ def compDCT2(nom,decoupage,quantification):
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
             matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
-            matsec=matsec/matquant
+            matsec=np.round_(matsec/matquant)
+            #matsec=matsec/matquant
             
             dernier=rle(diago(matsec))[-1]
             for k in rle(diago(matsec)):
