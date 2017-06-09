@@ -96,7 +96,10 @@ def lecture(chemin):
 def transfomatrice(chemin,taillebloc,matquant,dctmat,invdct):
 	unrl=[]
 	for k in lecture(chemin): #on décompresse chaque bloc dans la liste renvoyée par la fonction lecture
-		aux=dediago(unrle(k,taillebloc**2))*matquant
+		aux=dediago(unrle(k,taillebloc**2))
+		#print("aux",aux)
+		#print(aux)
+		aux=aux*matquant
 		aux=plus127(invdct.dot(aux.dot(dctmat)))
 		unrl.append(aux) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
 	return unrl
@@ -139,11 +142,13 @@ def decoupNxN(i,n):
     return liste
 ##matrice de quantification
 def quantMat(quant):
-    q=[800,600,500,800,1200,2000,2550,2550],[550,600,700,950,1300,2550,2550,2550],[700,650,800,1200,2000,2550,2550,2550],[700,850,1100,1450,2550,2550,2550,2550],[900,1100,1850,2550,2550,2550,2550,2550],[1200,1750,2550,2550,2550,2550,2550,2550],[2450,2550,2550,2550,2550,2550,2550,2550],[2550,2550,2550,2550,2550,2550,2550,2550]
-    q=0.1*np.asarray(q)
+    """q=[800,600,500,800,1200,2000,2550,2550],[550,600,700,950,1300,2550,2550,2550],[700,650,800,1200,2000,2550,2550,2550],[700,850,1100,1450,2550,2550,2550,2550],[900,1100,1850,2550,2550,2550,2550,2550],[1200,1750,2550,2550,2550,2550,2550,2550],[2450,2550,2550,2550,2550,2550,2550,2550],[2550,2550,2550,2550,2550,2550,2550,2550]"""
+    q=[16,11,10,16,24,40,51,61],[12,12,14,19,26,58,60,55],[14,13,16,24,40,57,69,56],[14,17,22,29,51,87,80,62],[18,22,37,56,68,109,103,77],[24,35,55,64,81,104,113,92],[49,64,78,87,103,121,120,101],[72,92,95,98,112,100,103,99]
     q=np.reshape(q,(8,8))
-    if quant!=0:
-        q=np.ceil(q*(quant/100))
+    if quant>50:
+        q=np.ceil((100-quant)/50*q)
+    else:
+        q=np.ceil(50/quant*q)
     print(q)
     return q
 ##recomposition de la matrice image
