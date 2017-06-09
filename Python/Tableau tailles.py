@@ -1,7 +1,9 @@
 import numpy as np
 import os as os
 #quant,poids par couleur,poids total,taux de compression
-def tabpoids(nom,quant):
+#quant=liste des valeurs de quantification a tester pour le tableau
+#pour ouvrir un tableau deja enregistrer, il faut utiliser "np.load('nomfichier.npy')"
+def tabpoids(nom,quant,sortie):
     tab=np.zeros((len(quant),6))
     poids=os.path.getsize(nom)
     for k in range(len(quant)):
@@ -12,5 +14,5 @@ def tabpoids(nom,quant):
         tab[k][3]=os.path.getsize("3.txt")
         tab[k][4]=tab[k][3]+tab[k][2]+tab[k][1]
         tab[k][5]=poids/tab[k][4]
-    np.save("tableaucomp.txt",tab)
+    np.save(sortie,tab)
     print(poids,tab)
