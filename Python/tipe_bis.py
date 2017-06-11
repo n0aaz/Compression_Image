@@ -66,6 +66,9 @@ def rle(l):
 		else:
 			sortie.append([k,l[a-1]]) #puis on ajoute dans une liste selon [répétitions,nombre]
 			k=1
+	if sortie[-1][1]==0 and len(sortie) != 1: # La compression va faire qu'on aura plein de zéros inutiles , autant les enlever puisque unrle s'occupe de compléter
+		sortie.pop()
+		
 	return sortie
 #Décompression RLE
 def unrle(l,n):
@@ -100,6 +103,7 @@ def transfomatrice(chemin,taillebloc,matquant,dctmat,invdct):
 		#print("aux",aux)
 		#print(aux)
 		aux=aux*matquant
+		#print("aux",aux)
 		aux=plus127(invdct.dot(aux.dot(dctmat)))
 		unrl.append(aux) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
 	return unrl

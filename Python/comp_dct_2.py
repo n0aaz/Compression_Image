@@ -3,9 +3,9 @@ import numpy as np
 import os as os
 import math as math
 
-os.chdir("C:\\Users\\valen\\Documents\\GitHub\\Compression_Image\\Python")#attention, definir le chemin d'accès de votre ordi!
+os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
 from tipe_bis import *
-os.chdir("C:\\valentin\\MPSI\\TIPE\\images\\DCT")#attention, definir le chemin d'accès de votre ordi!
+os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
 
 
 def compDCT2(nom,decoupage,quantification):
@@ -32,7 +32,9 @@ def compDCT2(nom,decoupage,quantification):
         
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
-            matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
+            matsec=np.dot(dctmat,np.dot(matsec,invdct))
+            #dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
+            #print(matsec)
             matsec=np.round_(matsec/matquant)
             #matsec=matsec/matquant
             
@@ -45,7 +47,7 @@ def compDCT2(nom,decoupage,quantification):
             enreg.write('\n')
 
             #print(rle(diago(matsec)))
-            #print(lecture('compress.txt'))
+            #print(lecture(chemin))
             #print(dediago(unrle(rle(diago(matsec)),d**2))-matsec) #petite vérfication pour voir si la compression/décompression fonctionne
                                                                   #Si c'est le cas ça devrait nous renvoyer uniquement des matrices nulles
             matsec=matsec*matquant
@@ -65,6 +67,7 @@ def compDCT2(nom,decoupage,quantification):
         #print(len(lmat))
         enreg.close()
         #transfomatrice(chemin,d,matquant,dctmat,invdct)
+        #print(transfomatrice(chemin,d,matquant,dctmat,invdct))
         mat=recoNxN(transfomatrice(chemin,d,matquant,dctmat,invdct),ligne,colonne,d)
         #print("test",mat)
         #print("final",mat)
