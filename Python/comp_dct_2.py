@@ -2,10 +2,10 @@ import imageio as im
 import numpy as np
 import os as os
 import math as math
-from tipe_bis import *
 
-os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
-os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
+os.chdir("C:\\Users\\valen\\Documents\\GitHub\\Compression_Image\\Python")#attention, definir le chemin d'accès de votre ordi!
+from tipe_bis import *
+os.chdir("C:\\valentin\\MPSI\\TIPE\\images\\DCT")#attention, definir le chemin d'accès de votre ordi!
 
 
 def compDCT2(nom,decoupage,quantification):
@@ -33,7 +33,8 @@ def compDCT2(nom,decoupage,quantification):
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
             matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
-            matsec=np.round(matsec/matquant)
+            matsec=np.round_(matsec/matquant)
+            #matsec=matsec/matquant
             
             dernier=rle(diago(matsec))[-1]
             for k in rle(diago(matsec)):
@@ -48,11 +49,13 @@ def compDCT2(nom,decoupage,quantification):
             #print(dediago(unrle(rle(diago(matsec)),d**2))-matsec) #petite vérfication pour voir si la compression/décompression fonctionne
                                                                   #Si c'est le cas ça devrait nous renvoyer uniquement des matrices nulles
             matsec=matsec*matquant
+            #print(matsec)
             #print(transfomatrice(chemin,d)[1])
             #print(len(np.round(transfomatrice(chemin,d)*matquant)))
             #print(len(matsec))
 
             matsec=plus127(invdct.dot(matsec.dot(dctmat)))
+            #print("127",matsec)
             #print(matsec)
             
             lmat[j]=matsec
@@ -63,10 +66,14 @@ def compDCT2(nom,decoupage,quantification):
         enreg.close()
         #transfomatrice(chemin,d,matquant,dctmat,invdct)
         mat=recoNxN(transfomatrice(chemin,d,matquant,dctmat,invdct),ligne,colonne,d)
+        #print("test",mat)
+        #print("final",mat)
         mat=redim(mat,ligne,colonne)
         lf.append(mat)
     matc=recoRGB(lf)
+    matc=plus127(matc)
     saveIm(matc,n)
     #print(len(lecture('compress.txt')[0]))
 
 compDCT2('paysage.bmp',8,35)
+
