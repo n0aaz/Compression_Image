@@ -69,4 +69,4 @@ def compDCT2(nom,decoupage,quantification):
     saveIm(matc,n)
     #print(len(lecture('compress.txt')[0]))
 
-compDCT2('paysage.bmp',8,100)
+compDCT2('paysage.bmp',8,35)
