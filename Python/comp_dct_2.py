@@ -32,8 +32,8 @@ def compDCT2(nom,decoupage,quantification):
         
         for j in range(len(lmat)): #génération et compression de la matrice
             matsec=moins127(np.int_(lmat[j]))
-            matsec=np.dot(dctmat,np.dot(matsec,invdct))
-            #dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
+            #print(matsec)
+            matsec=dctmat.dot(matsec.dot(invdct))#on obtient matsec dans la base DCT
             #print(matsec)
             matsec=np.round_(matsec/matquant)
             #matsec=matsec/matquant
@@ -74,9 +74,9 @@ def compDCT2(nom,decoupage,quantification):
         mat=redim(mat,ligne,colonne)
         lf.append(mat)
     matc=recoRGB(lf)
-    matc=plus127(matc)
+    #matc=plus127(matc)
     saveIm(matc,n)
     #print(len(lecture('compress.txt')[0]))
 
-compDCT2('paysage.bmp',8,35)
+compDCT2('Oceanwave.bmp',8,10)
 

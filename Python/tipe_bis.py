@@ -66,8 +66,8 @@ def rle(l):
 		else:
 			sortie.append([k,l[a-1]]) #puis on ajoute dans une liste selon [répétitions,nombre]
 			k=1
-	if sortie[-1][1]==0 and len(sortie) != 1: # La compression va faire qu'on aura plein de zéros inutiles , autant les enlever puisque unrle s'occupe de compléter
-		sortie.pop()
+	'''if sortie[-1][1]==0 and len(sortie) != 1: # La compression va faire qu'on aura plein de zéros inutiles , autant les enlever puisque unrle s'occupe de compléter
+		sortie.pop()'''
 		
 	return sortie
 #Décompression RLE
@@ -105,7 +105,7 @@ def transfomatrice(chemin,taillebloc,matquant,dctmat,invdct):
 		aux=aux*matquant
 		#print("aux",aux)
 		aux=plus127(invdct.dot(aux.dot(dctmat)))
-		unrl.append(aux) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
+		unrl.append(np.round_(aux)) #on décompresse selon le schéma BLOC->UNRLE->DEDIAGO pour avoir une liste de matrices
 	return unrl
 
 #print(len(lecture('3.txt')))
@@ -116,7 +116,7 @@ def lectImage(n):
     return np.asarray(im.imread(n))
 ##moins 127
 def moins127(n):
-    return n-127
+    return n-128
 ##decomp image couleur
 def decomCouleur(i):
     t=i.shape;n=t[2];c=t[1];l=[t];ligne=t[0]
@@ -182,7 +182,7 @@ def recoRGB(i):
     return l
 ##plus 127
 def plus127(i):
-    return i+127
+    return i+128
 ##sauvegarde image
 def saveIm(i,n):
     n=n[0:n.index(".")]+"comp.bmp"
