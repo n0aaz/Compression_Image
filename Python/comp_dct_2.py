@@ -3,9 +3,9 @@ import numpy as np
 import os as os
 import math as math
 
-os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
+os.chdir("C:\\Users\\valen\\Documents\\GitHub\\Compression_Image\\Python")#attention, definir le chemin d'accès de votre ordi!
 from tipe_bis import *
-os.chdir("/home/n0aaz/compression/Compression_Image/Python")#attention, definir le chemin d'accès de votre ordi!
+os.chdir("C:\\valentin\\MPSI\\TIPE\\images\\DCT")#attention, definir le chemin d'accès de votre ordi!
 
 
 def compDCT2(nom,decoupage,quantification):
@@ -39,6 +39,7 @@ def compDCT2(nom,decoupage,quantification):
             #matsec=matsec/matquant
             
             dernier=rle(diago(matsec))[-1]
+            print(len(rle(diago(matsec))))
             for k in rle(diago(matsec)):
                 if k != dernier:
                     enreg.write(str(k[0])+','+str(int(k[1]))+'/')
