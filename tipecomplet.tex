@@ -14,7 +14,7 @@
 \usepackage{caption}
 \pagestyle{fancy} 
 \lfoot{TIPE Compression d'images} 
-\rfoot{Lycée Blaise Pascal 2017-2018} 
+\rfoot{Lycée Blaise Pascal 2016-2017} 
 
 \renewcommand{\footrulewidth}{0.8pt}
 
@@ -24,7 +24,7 @@
 \tableofcontents
 \newpage
 \section{Objectifs et types de compression d'images}	
-Les images peuvent être codées « naïvement » : il s’agit d’enregistrer une matrice contenant pour chaque pixel, la valeur de celui-ci s’il s’agit d’une image en noir et blanc, les valeurs rouge, verte et bleues si c’est une image en couleur. Ce format est simple à mettre en œuvre et facile à décoder, cependant il est très gourmand en stockage.  Par exemple pour image couleur de taille 500*500 (taille moyenne), il faut près de 75000 octets soit 600000bits ! Ce qui peut s’avérer problématique pour le stockage de grandes quantités d’images, mais aussi lors de transferts. C’est pourquoi il est intéressant de compresser les images, c’est-à-dire diminuer leur poids. Deux types de compression se présentent à l’utilisateur.
+Les images peuvent être codées « naïvement » : il s’agit d’enregistrer une matrice contenant pour chaque pixel, la valeur de celui-ci s’il s’agit d’une image en noir et blanc, les valeurs rouge, verte et bleues si c’est une image en couleur. Ce format est simple à mettre en œuvre et facile à décoder, cependant il est très gourmand en stockage.  Par exemple pour image couleur de taille 500*500 (taille moyenne), il faut près de 75000 octets soit 600000bits ! Ce qui peut s’avérer problématique pour le stockage de grandes quantités d’images, mais aussi lors de transferts. C’est pourquoi il est intéressant de compresser les images, c’est-à-dire diminuer leur poids. Deux types de compression se présentent à l’utilisateur.
 D’une part, la compression sans perte, qui permet de conserver une netteté des traits irréprochable. Cette compression est utilisée pour des images nécessitant une très grande précision, tel que les schémas, les dessins techniques ou les balayages médicaux.
 D’autre part, la compression avec perte privilégiant l’économie de poids à la qualité. Ce qui s'avère utile dans le cas de transmission à bas débit, ou pour un stockage de masse d’images, cependant la qualité de l’image est dégradée. Le format JEPG (Joint Photographic Expert Group) s’avère être un bon compromis entre une qualité d’image très correcte et une bonne compression, pour ces motifs ce format est aujourd'hui le plus vastement. La compression JPEG s’appuie sur la DCT (Discret Cosinus Transform) consistant en une sorte de décomposition de fourier en deux dimensions.
 Nous avons réalisé à l’aide du logiciel de programmation Python une compression de type JPEG.
@@ -34,7 +34,7 @@ Nous avons réalisé à l’aide du logiciel de programmation Python une compres
 \section{Compression JPEG}
 La compression JPEG permet une bonne qualité car elle utilise la DCT. En effet, la DCT permet de traduire une information spatiale en une information fréquentielle. Les variations rapides d’intensités, traduites pas les hautes fréquences étant rares, et l’œil humain les percevant mal, elles sont supprimées au cours de la compression. Une image à laquelle on applique la compression JPEG suit le traitement suivant.
 \paragraph{}
-\includegraphics[scale=0.2]{/Users/guilbertaugustin/Desktop/schema_dct.png} %scale pour augmenter ou diminuer proportionnellement la hauteur et largeur de l'image
+\includegraphics[scale=0.2]{schema_dct.png} %scale pour augmenter ou diminuer proportionnellement la hauteur et largeur de l'image
 \paragraph{}
 La première étape est la lecture de l’image qui consiste à la convertir en une matrice de dimension 3 (longueur, largeur, nombre de couleurs). Cette étape est suivie dans le cas d’une image en couleur par la décomposition de cette matrice en trois matrices contenant chacune les valeurs du pixel pour une couleur donnée. Il faut ensuite découper cette matrice en blocs carrés pour pouvoir procéder à un traitement différé sur chaque bloc pour économiser en temps de calcul, on choisira une taille de bloc de 8 par 8 pour des raisons de complexité en temps et de précision utile. Cette opération peut nécessiter le rajout de lignes et de colonnes si le nombre de pixel d’une dimension n’est pas un multiple de 8, les colonnes et lignes rajoutées sont alors des copies de la dernière ligne ou colonne propre à l’image, car elles n’interfèrent pas dans la DCT. Ces blocs de matrices subissent alors un changement de base, permettant de faire apparaître les variations d’intensité sous forme de fréquences. La matrice de passage d’une base à l’autre est la suivante:
 \paragraph{}
@@ -72,9 +72,9 @@ C(i)(j)=\cfrac{1}{\sqrt{2N}} \biggl[\sum_{1\leq x\leq N-1} \sum_{1\leq y\leq N-1
 \end{equation*}
 
 
- Arrive alors l’étape de la quantification qui consiste à diviser les coefficients de l’image par ceux d’une matrice de quantification, permettant de ne conserver que les coefficients les plus importants : 
+ Arrive alors l’étape de la quantification qui consiste à diviser les coefficients de l’image par ceux d’une matrice de quantification, permettant de ne conserver que les coefficients les plus importants : 
 				%Matrice de quantification
-La Matrice ainsi obtenue est alors diagonalisée, c’est-à-dire qu’elle la transforme en liste en la parcourant de la manière suivante :
+La Matrice ainsi obtenue est alors diagonalisée, c’est-à-dire qu’elle la transforme en liste en la parcourant de la manière suivante :
 			%Schéma de la diagonalisation
 Cette liste contenant beaucoup de 0 consécutifs, elle subit une RLE (Run-Lenth Encoding), qui consiste à indiquer le nombre de coefficients de même valeur consécutifs et la valeur de ce coefficient. Enfin, ces listes sont enregistrées en tant que fichiers textes et représentent l’image une fois compressée.
 
