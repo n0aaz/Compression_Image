@@ -38,9 +38,29 @@ La compression JPEG permet une bonne qualité car elle utilise la DCT. En effet,
 \includegraphics[scale=0.2]{schema_dct_new.png} %scale pour augmenter ou diminuer proportionnellement la hauteur et largeur de l'image
 \end{center}
 \paragraph{}
-La première étape est la lecture de l’image qui consiste à la convertir en une matrice de dimension 3 (longueur, largeur, nombre de couleurs). Cette étape est suivie dans le cas d’une image en couleur par la décomposition de cette matrice en trois matrices contenant chacune les valeurs des pixels pour une couleur donnée. Il faut ensuite découper cette matrice en blocs carrés de 8 coefficients. Cette opération peut nécessiter le rajout de lignes et de colonnes si le nombre de lignes et de colonnes n’est pas un multiple de 8, les colonnes et lignes rajoutées sont alors des copies de la dernière ligne ou colonne propre à l’image, ainsi elles n’interfèrent pas dans la DCT. Ces blocs de matrices subissent alors un changement de base, permettant de faire apparaître les variations d’intensité sous forme de fréquences. La matrice de passage d’une base à l’autre est la suivante:
+La formule de la Transformée en Cosinus Discrète (DCT) se définit de la manière suivante: 
+
+\begin{equation*} 
+C(i)(j)=\cfrac{1}{\sqrt{2N}} \biggl[\sum_{1\leq x\leq N-1} \sum_{1\leq y\leq N-1} p(x,y) \cos{\biggl[\cfrac{(2x+1) i \Pi}{2N}}\biggr] \cos{\biggl[\cfrac{(2y+1) j \Pi}{2N}}\biggr]\biggr]
+\end{equation*}
+
+La première étape est la lecture de l’image qui consiste à la convertir en une matrice de dimension 3 (longueur, largeur, nombre de couleurs). Cette étape est suivie dans le cas d’une image en couleur par la décomposition de cette matrice en trois matrices contenant chacune les valeurs des pixels pour une couleur donnée. Il faut ensuite découper cette matrice en blocs carrés , pour des raisons de complexité de calcul on se limitera à une taille de 8, bon compromis entre temps de calcul et précision. Cette opération peut nécessiter le rajout de lignes et de colonnes si le nombre de lignes et de colonnes n’est pas un multiple de 8, les colonnes et lignes rajoutées sont alors des copies de la dernière ligne ou colonne propre à l’image, ainsi elles n’interfèrent pas dans la DCT. Ces blocs de matrices subissent alors un changement de base, permettant de faire apparaître les variations sous forme de fréquences. Mais cela reste encore une opération très couteuse: il faudrait parcourir chaque matrice et calculer une somme double pour chaque coefficient.
 \paragraph{}
+
+\paragraph{}
+Pour éviter cela, on peut concevoir cette formule comme un changement de base avec la matrice de passage définie de la manière suivante:
 \begin{center}
+$P(i)(j)=
+\begin{Bmatrix}
+\cfrac{1}{\sqrt{2N}}  \qquad if \quad i=0 \\
+\sqrt{\cfrac{2}{N}} \: cos\biggl[\cfrac{2*j+1}{2N}\biggr] \qquad if \quad i>0 \\
+\end{Bmatrix}
+$
+\end{center}
+\paragraph{}
+Ce qui nous donne, une fois calculée numériquement:
+\begin{center}
+
 $P=
 \begin{Bmatrix}
 
@@ -58,30 +78,15 @@ $
 \end{center}
 
 \paragraph{}
-
-Ce qui revient à construire un matrice de terme général:
-\begin{center}
-$P(i)(j)=
-\begin{Bmatrix}
-\cfrac{1}{\sqrt{2N}}  \qquad if \quad i=0 \\
-\sqrt{\cfrac{2}{N}} \: cos\biggl[\cfrac{2*j+1}{2N}\biggr] \qquad if \quad i>0 \\
-\end{Bmatrix}
-$
-\end{center}
-On réalise alors le changement de base suivant la formule suivante: P.M.P\up{-1}. Ce changement de base serait équivalent à réaliser l'opération suivante sur tous les coefficients des blocs de matrices.
-\begin{equation*} 
-C(i)(j)=\cfrac{1}{\sqrt{2N}} \biggl[\sum_{1\leq x\leq N-1} \sum_{1\leq y\leq N-1} p(x,y) \cos{\biggl[\cfrac{(2x+1) i \Pi}{2N}}\biggr] \cos{\biggl[\cfrac{(2y+1) j \Pi}{2N}}\biggr]\biggr]
-\end{equation*}
-Il est donc préférable de réaliser le changement de base, car il suffit de calculer une fois pour toutes la matrice de passage, ce qui réduit considérablement le nombre d'opérations.
+On réalise alors le changement de base suivant la formule suivante: P.M.P\up{-1} , la matrice de passage n'étant calculée qu'une fois, on réduit la complexité de O(n\up{4}) à celle des fonctions numpy.dot() utilisées dans notre programme pour multiplier plus efficacement 
 \newline
 \paragraph{}
- Arrive alors l’étape de la quantification qui consiste à diviser les coefficients de l’image par ceux d’une matrice de quantification, permettant de ne conserver que les coefficients les plus importants. 
- \paragraph{}
+ Arrive alors l’étape de la quantification qui consiste à diviser les coefficients de l’image par ceux d’une matrice de quantification: on ne conserve que les coefficients les plus importants : l'arrondi à la partie entière permet d'en réduire une bonne partie à 0. Nous avons retenu celle ci à un niveau de quantification de 10%
  \begin{center}
  \includegraphics[scale=0.75]{photo1}
  \end{center}
 \newpage
-La Matrice ainsi obtenue est parcourue pour être transformée en une liste de la manière suivante :
+La Matrice obtenue après quantification est ensuite parcourue puis ses éléments ajoutés à une liste selon le schéma suivant :
 
  \begin{center}
  \includegraphics[scale=0.7]{image4}
@@ -89,7 +94,12 @@ La Matrice ainsi obtenue est parcourue pour être transformée en une liste de l
 	
 Cette liste contenant beaucoup de 0 consécutifs, elle subit une RLE (Run-Lenth Encoding), qui consiste à indiquer le nombre de coefficients de même valeur consécutifs et la valeur de ce coefficient. Enfin, ces listes sont enregistrées en tant que fichiers textes qui représentent l’image une fois compressée.
 \newline
-La décompression suit le chemins inverse. Tout d’abord, une fonction lit et transforme en liste les fichiers textes contenant l’image compressée, puis ces listes subissent une RLE inverse permettant d’obtenir 64 coefficients. On transforme ensuite cette liste en une matrice 8*8. Les coefficients de la matrice sont ensuite multipliés par les coefficients de la matrice de quantification, puis on réalise un changement de base de la matrice dans la base canonique. Les blocs de 64 pixels sont alors rassemblés, puis les colonnes et lignes rajoutées sont supprimées afin de donner à la matrice les dimensions de l’image d’origine. Enfin, dans le cas échéant, les matrices des différentes couleurs sont assemblées puis cette matrice finale est enregistrée au format image pour donner une image finale de même taille que l’image de départ.
+La décompression suit le chemin inverse: 
+\newline
+Tout d’abord, une fonction lit et transforme en liste les fichiers textes contenant l’image compressée, puis ces listes subissent une RLE inverse permettant d’obtenir 64 coefficients. 
+On transforme ensuite cette liste en une matrice 8*8 selon le schéma diagonal défini plus haut dans le sens inverse. Les coefficients de la matrice sont ensuite multipliés par ceux de la matrice de quantification, puis on réalise le changement de base inverse. Les blocs de 64 pixels sont alors rassemblés, puis les colonnes et lignes rajoutées sont supprimées afin de donner à la matrice les dimensions de l’image d’origine. 
+\newline
+Finalement, les matrices des différentes couleurs sont assemblées puis cette matrice finale est enregistrée au format image pour donner une image finale de même taille que l’originale.
 \newpage
 
 \section{Résultats obtenus}
@@ -154,7 +164,7 @@ Ainsi, la compression de l’image reste imperceptible pour un niveau de quantif
     \end{minipage}
 \end{figure}
 \paragraph{}
-Les compressions avec pertes officielles peuvent avoir des taux de compressions allant de 3 à 100, ce qui est beaucoup plus important que ce que nous réalisons, car nous obtenons un taux maximal de 9 pour des images de très mauvaise qualité. En effet, notre programme n'est pas optimal pour plusieurs raisons: les fichiers textes de la compression sont codés en binaire et non pas en hexadécimal, ce qui permettrait un gain de place, le temps de compression est élevé.
+Les compressions avec pertes officielles peuvent avoir des taux de compressions allant de 3 à 100, ce qui est beaucoup plus important que ce que nous réalisons, car nous obtenons un taux maximal de 9 pour des images de très mauvaise qualité. En effet, notre programme n'est pas optimal pour plusieurs raisons: les fichiers textes de la compression sont codés en tant que caractères qui plus est avec des caractères séparateurs et non pas en hexadécimal, privilégié normalement, ce qui permettrait un gain de place, le temps de compression est élevé.
 \newpage
 \section{Bibliographie}
 \paragraph{}
