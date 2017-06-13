@@ -24,10 +24,10 @@
 \tableofcontents
 \newpage
 \section{Objectifs et types de compression d'images}	
-Les images peuvent être codées « naïvement » : il s’agit d’enregistrer une matrice contenant pour chaque pixel: la valeur de celui-ci s’il s’agit d’une image en noir et blanc, les valeurs rouge, verte et bleues si c’est une image en couleur. Ce format est simple à mettre en œuvre et facile à décoder, cependant il est très gourmand en stockage.  Par exemple pour image couleur de taille 500*500 (taille moyenne), il faut près de 75000 octets soit 600000bits ! Ce qui peut s’avérer problématique pour le stockage de grandes quantités d’images, mais aussi lors des transferts. C’est pourquoi il est intéressant de compresser les images, c’est-à-dire diminuer leur poids. Deux types de compression se présentent à l’utilisateur.
+Les images peuvent être codées « naïvement » : il s’agit d’enregistrer une matrice contenant pour chaque pixel l'intensité de chaque couleur . Ce format est simple à mettre en œuvre et facile à décoder, cependant il est très gourmand en stockage.  Par exemple pour image couleur de taille 500*500 (taille icone), il faut près de 75000 octets soit 600000bits ! Ce qui peut s’avérer problématique pour le stockage de grandes quantités d’images et de transferts. C’est pourquoi il est intéressant de compresser les images, c’est-à-dire diminuer leur poids. Deux types de compression se présentent à l’utilisateur:
 D’une part, la compression sans perte, qui permet de conserver une netteté des traits irréprochable. Cette compression est utilisée pour des images nécessitant une très grande précision, tel que les schémas, les dessins techniques ou les balayages médicaux.
 D’autre part, la compression avec perte privilégie par définition l’économie de poids à la qualité. Ce qui est utile dans le cas de transmission bas débit, ou pour un stockage de masse d’images, cependant la qualité de l’image est dégradée. Le format JPEG (Joint Photographic Expert Group) s’avère être un bon compromis entre une qualité d’image très correcte et une bonne compression. La compression JPEG s’appuie sur la DCT (Discrete Cosine Transform).
-Nous avons réalisé à l’aide du logiciel de programmation Python une compression de type JPEG.
+Nous avons ici réalisé en Python une compression de type JPEG.
 
 
 \newpage
